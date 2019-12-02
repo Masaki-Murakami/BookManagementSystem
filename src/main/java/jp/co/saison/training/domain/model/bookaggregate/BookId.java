@@ -13,6 +13,10 @@ import java.util.UUID;
 public class BookId {
     private final UUID bookId;
 
+    static public BookId fromString(String name){
+        return of(UUID.fromString(name));
+    }
+
     @Override
     public String toString() {
         return bookId.toString();

@@ -11,17 +11,17 @@ import java.util.Optional;
 @EqualsAndHashCode
 public class Book {
     private final BookId id;
-    private final Optional<Isbn13> isbn13;
+    private final Isbn13 isbn13;
     private final Title title;
     private BookStatus status;
-    private Optional<UserId> borrowerId;
+    private UserId borrowerId;
 
     private Book(BookId id, Isbn13 isbn13, Title title) {
         this.id = id;
-        this.isbn13 = Optional.ofNullable(isbn13);
+        this.isbn13 = isbn13;
         this.title = title;
         status = BookStatus.Lendable;
-        borrowerId = Optional.empty();
+        borrowerId = null;
     }
 
     public static Book create(@NonNull BookId bookId, @NonNull Isbn13 isbn13, @NonNull Title title) {
@@ -32,12 +32,21 @@ public class Book {
         return new Book(bookId, null, title);
     }
 
+
+    public Optional<Isbn13> getIsbn13() {
+        return Optional.ofNullable(isbn13);
+    }
+
+    public Optional<UserId> getBorrowerId() {
+        return Optional.ofNullable(borrowerId);
+    }
+
     public void lend(@NonNull UserId borrowerId) {
         if (status != BookStatus.Lendable) {
             throw new IllegalStateException("bookStatus must be " + BookStatus.Lendable.name());
         }
 
-        this.borrowerId = Optional.of(borrowerId);
+        this.borrowerId = borrowerId;
         status = BookStatus.InLending;
     }
 
@@ -45,11 +54,11 @@ public class Book {
         if (status != BookStatus.InLending) {
             throw new IllegalStateException("bookStatus must be " + BookStatus.InLending.name());
         }
-        if (!(this.borrowerId.orElseThrow(IllegalStateException::new).equals(borrowerId))) {
+        if (!(this.getBorrowerId().orElseThrow(IllegalStateException::new).equals(borrowerId))) {
             throw new IllegalArgumentException("borrowerId does not match");
         }
 
-        this.borrowerId = Optional.empty();
+        this.borrowerId = null;
         status = BookStatus.Lendable;
     }
 }
