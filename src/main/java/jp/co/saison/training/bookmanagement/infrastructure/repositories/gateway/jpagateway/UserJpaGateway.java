@@ -9,4 +9,6 @@ import java.util.Optional;
 @Component
 public interface UserJpaGateway extends JpaRepository<UserJpaModel, String> {
     Optional<UserJpaModel> findByName(String name);
+
+    boolean existsByName(String name);
 }

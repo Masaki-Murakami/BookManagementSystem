@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 public class CreateUserForm {
-    @Size(max = 64)
+    @Size(max = 32)
     @NotBlank
     private String name;
 

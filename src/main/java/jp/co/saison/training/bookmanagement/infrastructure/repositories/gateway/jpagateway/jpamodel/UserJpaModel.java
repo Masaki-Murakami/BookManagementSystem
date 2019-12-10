@@ -17,7 +17,7 @@ public class UserJpaModel {
     @Column(length = 36)
     private String id;
 
-    @Column(length = 64, unique=true)
+    @Column(length = 32, unique=true)
     private String name;
 
     @Column(length = 256)

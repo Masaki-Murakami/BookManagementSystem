@@ -21,9 +21,14 @@ public class CreateUserUsecaseInteractor implements Usecase<CreateUserInputData,
 
     @Override
     public User hundle(CreateUserInputData inputData) {
+        Name name = Name.of(inputData.getName());
+        if(userRepository.existByName(name)){
+            throw new IllegalArgumentException("name already exists");
+        }
+
         User user = User.builder()
                 .id(userRepository.generateId())
-                .name(Name.of(inputData.getName()))
+                .name(name)
                 .role(Role.valueOf(inputData.getRole()))
                 .password(Password.of(passwordEncoder.encode(inputData.getPassword())))
                 .build();

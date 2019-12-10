@@ -9,10 +9,10 @@ import jp.co.saison.training.bookmanagement.presentation.authentication.SimpleLo
 import jp.co.saison.training.bookmanagement.presentation.authentication.SimpleTokenFilter;
 import jp.co.saison.training.bookmanagement.presentation.config.SecurityConfig;
 import jp.co.saison.training.bookmanagement.presentation.config.SpringSecurityConfig;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,11 +42,6 @@ class UserControllerTest {
 
     @MockBean
     private LoginUserDetailsService loginUserDetailsService;
-
-    @BeforeEach
-    void setup() {
-
-    }
 
     @Test
     void 管理ユーザはユーザー作成を呼び出しできる() throws Exception {
@@ -81,16 +76,46 @@ class UserControllerTest {
                         .content(inputJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectJson, true));
-
-        //        verify(createUserUsecaseInteractor, times(1)).hundle(createUserInputData)
     }
 
-    void 一般ユーザがユーザー作成実行すると例外が発生する() {
+    @Test
+    void 一般ユーザがユーザー作成実行するとステータスコード403が返却される() throws Exception {
+        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
+        String inputJson = "{ \"name\": \"user\", \"password\": \"password\", \"role\": \"GeneralUser\" }";
 
+        doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
+        doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
+
+        MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+        mockMvc.perform(
+                post("/api/users")
+                        .header("Authorization", "Bearer " + authorization)
+                        .contentType(MEDIA_TYPE_JSON_UTF8)
+                        .content(inputJson))
+                .andExpect(status().isForbidden());
     }
 
-    @Tag("バリデーションチェック")
-    void ユーザーを作成できる() {
+    @Nested
+    class バリデーションテスト {
+        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
 
+        @Tag("異常系")
+        @ParameterizedTest(name = "{0}")
+        @CsvFileSource(resources = "/presentation/controller/CreateUserValidation.csv", numLinesToSkip = 1)
+        void バリデーションに失敗するとステータスコード400が返却される(String comment, String inputJson) throws Exception {
+            doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
+            doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
+
+            MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+
+            mockMvc.perform(
+                    post("/api/users")
+                            .header("Authorization", "Bearer " + authorization)
+                            .contentType(MEDIA_TYPE_JSON_UTF8)
+                            .content(inputJson))
+                    .andExpect(status().isBadRequest());
+        }
     }
 }

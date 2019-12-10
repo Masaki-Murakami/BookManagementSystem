@@ -1,5 +1,6 @@
 package jp.co.saison.training.bookmanagement.infrastructure.repositories.jparepositories;
 
+import jp.co.saison.training.bookmanagement.domain.model.useraggregate.Name;
 import jp.co.saison.training.bookmanagement.domain.model.useraggregate.User;
 import jp.co.saison.training.bookmanagement.domain.model.useraggregate.UserId;
 import jp.co.saison.training.bookmanagement.domain.repositories.UserRepository;
@@ -23,7 +24,15 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existByName(Name name) {
+        return userJpaGateway.existsByName(name.toString());
+    }
+
+    @Override
     public void create(User user) {
+        if (userJpaGateway.existsById(user.getId().toString())) {
+            throw new IllegalArgumentException();
+        }
         UserJpaModel userJpaModel = UserJpaModel.builder()
                 .id(user.getId().toString())
                 .name(user.getName().toString())
@@ -35,6 +44,13 @@ public class JpaUserRepository implements UserRepository {
 
     @Override
     public void update(User user) {
+        UserJpaModel userJpaModel = userJpaGateway.findById(user.getId().toString())
+                .orElseThrow(() -> new IllegalArgumentException());
 
+        userJpaModel.setName(user.getName().toString());
+        userJpaModel.setPassword(user.getPassword().toString());
+        userJpaModel.setRole(user.getRole().toString());
+
+        userJpaGateway.save(userJpaModel);
     }
 }

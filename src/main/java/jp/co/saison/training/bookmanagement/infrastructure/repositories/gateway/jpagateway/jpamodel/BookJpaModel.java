@@ -19,7 +19,7 @@ public class BookJpaModel {
     @Column(length = 13)
     private String isbn13;
 
-    @Column(length = 128)
+    @Column(length = 32)
     private String title;
 
     @Column(length = 32)

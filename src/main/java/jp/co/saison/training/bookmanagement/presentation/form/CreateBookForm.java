@@ -11,6 +11,6 @@ public class CreateBookForm {
     @Pattern(regexp = "\\d+")
     private String isbn13;
 
-    @Size(max = 128)
+    @Size(max = 32)
     private String title;
 }

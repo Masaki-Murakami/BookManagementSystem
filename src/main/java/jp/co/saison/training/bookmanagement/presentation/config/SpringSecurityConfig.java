@@ -38,6 +38,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .mvcMatchers("/logout")
                 .authenticated()
+                .mvcMatchers("/api/books")
+                .hasRole(Role.Administrator.name())
                 .mvcMatchers("/api/books/**")
                 .hasRole(Role.GeneralUser.name())
                 .mvcMatchers("/api/users/**")
@@ -86,10 +88,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-//    GenericFilterBean tokenFilter() {
-//        return simpleTokenFilter;
-//    }
-
     AuthenticationEntryPoint authenticationEntryPoint() {
         return new SimpleAuthenticationEntryPoint();
     }
@@ -97,10 +95,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     AccessDeniedHandler accessDeniedHandler() {
         return new SimpleAccessDeniedHandler();
     }
-
-//    AuthenticationSuccessHandler authenticationSuccessHandler() {
-//        return simpleAuthenticationSuccessHandler;
-//    }
 
     AuthenticationFailureHandler authenticationFailureHandler() {
         return new SimpleAuthenticationFailureHandler();
