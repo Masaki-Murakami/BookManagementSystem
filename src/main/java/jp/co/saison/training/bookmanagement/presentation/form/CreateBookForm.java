@@ -2,6 +2,7 @@ package jp.co.saison.training.bookmanagement.presentation.form;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -12,5 +13,6 @@ public class CreateBookForm {
     private String isbn13;
 
     @Size(max = 32)
+    @NotBlank
     private String title;
 }

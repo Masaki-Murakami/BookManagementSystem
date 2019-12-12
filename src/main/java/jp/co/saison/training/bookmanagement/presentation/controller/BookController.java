@@ -10,6 +10,7 @@ import jp.co.saison.training.bookmanagement.presentation.authentication.SimpleLo
 import jp.co.saison.training.bookmanagement.presentation.dto.BookDto;
 import jp.co.saison.training.bookmanagement.presentation.form.CreateBookForm;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,16 +19,18 @@ import java.util.Optional;
 
 @RequestMapping("/api/books")
 @RestController
+@Validated
 public class BookController {
     private final Usecase<CreateBookInputData, Book> createBookUsecase;
     private final Usecase<FindBookInputData, Optional<Book>> findBookUsecase;
     private final Usecase<BorrowBookInputData, Void> borrowBookUsecase;
-    private final Usecase<GiveBackBookInputData, Book> giveBackBookUsecase;
+    private final Usecase<GiveBackBookInputData, Void> giveBackBookUsecase;
 
     public BookController(
             Usecase<CreateBookInputData, Book> createBookUsecase,
             Usecase<FindBookInputData, Optional<Book>> findBookUsecase,
-            Usecase<BorrowBookInputData, Void> borrowBookUsecase, Usecase<GiveBackBookInputData, Book> giveBackBookUsecase) {
+            Usecase<BorrowBookInputData, Void> borrowBookUsecase,
+            Usecase<GiveBackBookInputData, Void> giveBackBookUsecase) {
         this.createBookUsecase = createBookUsecase;
         this.findBookUsecase = findBookUsecase;
         this.borrowBookUsecase = borrowBookUsecase;

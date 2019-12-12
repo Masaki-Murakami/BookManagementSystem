@@ -17,5 +17,6 @@ public class CreateUserForm {
     private String password;
 
     @Pattern(regexp = "Administrator|GeneralUser")
+    @NotBlank
     private String role;
 }

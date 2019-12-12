@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class GiveBackBookUsecaseInteractor implements Usecase<GiveBackBookInputData, Book> {
+public class GiveBackBookUsecaseInteractor implements Usecase<GiveBackBookInputData, Void> {
     private final BookRepository bookRepository;
 
     public GiveBackBookUsecaseInteractor(BookRepository bookRepository) {
@@ -19,13 +19,13 @@ public class GiveBackBookUsecaseInteractor implements Usecase<GiveBackBookInputD
     }
 
     @Override
-    public Book hundle(GiveBackBookInputData giveBackBookInputData) {
+    public Void hundle(GiveBackBookInputData giveBackBookInputData) {
         Book book = bookRepository.findById(BookId.fromString(giveBackBookInputData.getBookId()))
                 .orElseThrow(() -> new IllegalArgumentException("book not found"));
 
         book.lend(UserId.fromString(giveBackBookInputData.getBookId()));
 
         bookRepository.update(book);
-        return book;
+        return null;
     }
 }
