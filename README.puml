@@ -3,7 +3,7 @@
 
 ## 実行方法
 * [Eclipse での起動方法](docs/eclipse.md)
-* Intellijでの起動方法(追加予定)
+* [Intellijでの起動方法](docs/intellij.md)
 * [SwaggerUIを使用した実行方法](docs/swaggerui.md)
 
 ## アーキテクチャ
