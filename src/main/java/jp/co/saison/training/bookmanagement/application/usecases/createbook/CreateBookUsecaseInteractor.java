@@ -6,6 +6,8 @@ import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Isbn13;
 import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Title;
 import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateBookUsecaseInteractor implements Usecase<CreateBookInputData, Book> {
@@ -16,6 +18,7 @@ public class CreateBookUsecaseInteractor implements Usecase<CreateBookInputData,
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Book hundle(CreateBookInputData createBookInputData) {
         Book book = Book.create(
                 bookRepository.generateId(),

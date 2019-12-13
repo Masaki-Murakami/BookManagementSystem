@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-@Primary
 @Repository
 public class JpaBookRepository implements BookRepository {
     private final BookJpaGateway bookJpaGateway;
@@ -28,6 +27,7 @@ public class JpaBookRepository implements BookRepository {
 
     //この部分はfactoryで実装するべき
     public static Book convertBookJpaModelToBook(BookJpaModel bookJpaModel) {
+
         return Book.create(
                 BookId.fromString(bookJpaModel.getId()),
                 bookJpaModel.getIsbn13() == null ? null : Isbn13.of(bookJpaModel.getIsbn13()),

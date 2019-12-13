@@ -8,6 +8,8 @@ import jp.co.saison.training.bookmanagement.domain.model.useraggregate.UserId;
 import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
 import jp.co.saison.training.bookmanagement.domain.repositories.BorrowerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BorrowBookUsecaseInteractor implements Usecase<BorrowBookInputData, Void> {
@@ -20,14 +22,15 @@ public class BorrowBookUsecaseInteractor implements Usecase<BorrowBookInputData,
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Void hundle(BorrowBookInputData inputData) {
-        Borrower borrower = borrowerRepository.findById(UserId.fromString(inputData.getBorrowerId()))
-                .orElseThrow(IllegalArgumentException::new);
         Book book = bookRepository.findById(BookId.fromString(inputData.getBookId()))
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("book not found"));
+        Borrower borrower = borrowerRepository.findById(UserId.fromString(inputData.getBorrowerId()))
+                .orElseThrow(() -> new IllegalArgumentException("borrower not found"));
 
-        if(borrower.getBorrowBooks().size() > 10){
-            throw new IllegalStateException();
+        if(borrower.getBorrowBooks().size() >= 5){
+            throw new IllegalStateException("borrowed books must be up to 5");
         }
         book.lend(borrower.getId());
         bookRepository.update(book);

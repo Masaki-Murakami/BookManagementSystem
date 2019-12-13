@@ -1,6 +1,7 @@
 package jp.co.saison.training.bookmanagement.domain.model.bookaggregate;
 
 import jp.co.saison.training.bookmanagement.domain.model.useraggregate.UserId;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -8,6 +9,7 @@ import lombok.NonNull;
 import java.util.Optional;
 
 @Getter
+@Builder
 @EqualsAndHashCode
 public class Book {
     private final BookId id;
@@ -16,21 +18,14 @@ public class Book {
     private BookStatus status;
     private UserId borrowerId;
 
-    private Book(BookId id, Isbn13 isbn13, Title title) {
-        this.id = id;
-        this.isbn13 = isbn13;
-        this.title = title;
-        status = BookStatus.Lendable;
-        borrowerId = null;
-    }
-
     public static Book create(@NonNull BookId bookId, Isbn13 isbn13, @NonNull Title title) {
-        return new Book(bookId, isbn13, title);
-    }
-
-    //TODO このコンストラクタは将来的に削除する
-    public static Book create(@NonNull BookId bookId, @NonNull Title title) {
-        return new Book(bookId, null, title);
+        return Book.builder()
+                .id(bookId)
+                .isbn13(isbn13)
+                .title(title)
+                .status(BookStatus.Lendable)
+                .borrowerId(null)
+                .build();
     }
 
     public Optional<Isbn13> getIsbn13() {
