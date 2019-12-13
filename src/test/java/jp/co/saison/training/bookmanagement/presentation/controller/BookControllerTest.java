@@ -93,10 +93,10 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/FindBook.csv", numLinesToSkip = 1)
     void 書籍情報を取得できる(String comment, String userid, String name, String password, String role) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser(userid, name, password, role);
-        String bookId = "00000000-0000-0000-0001-000000000001";
-        String expectJson = "{\"id\":\"00000000-0000-0000-0001-000000000001\",\"isbn13\":\"9784774153773\",\"title\":\"JUnit実践入門\"}";
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser(userid, name, password, role);
+        var bookId = "00000000-0000-0000-0001-000000000001";
+        var expectJson = "{\"id\":\"00000000-0000-0000-0001-000000000001\",\"isbn13\":\"9784774153773\",\"title\":\"JUnit実践入門\"}";
 
         var findBookInputData = FindBookInputData.builder()
                 .bookId(bookId)
@@ -122,8 +122,8 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/FindBookValidationFail.csv", numLinesToSkip = 1)
     void 書籍情報取得時にバリデーションに失敗するとステータスコード400が返却される(String comment, String bookId) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
@@ -137,11 +137,11 @@ class BookControllerTest {
 
     @Test
     void 管理者は書籍を登録できる() throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
-        String inputJson = "{ \"isbn13\": \"9784774153773\", \"title\": \"JUnit実践入門\" }";
-        String expectJson = "{\"id\":\"00000000-0000-0000-0001-000000000001\",\"isbn13\":\"9784774153773\",\"title\":\"JUnit実践入門\"}";
-        CreateBookInputData createBookInputData = CreateBookInputData.builder()
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var inputJson = "{ \"isbn13\": \"9784774153773\", \"title\": \"JUnit実践入門\" }";
+        var expectJson = "{\"id\":\"00000000-0000-0000-0001-000000000001\",\"isbn13\":\"9784774153773\",\"title\":\"JUnit実践入門\"}";
+        var createBookInputData = CreateBookInputData.builder()
                 .isbn13("9784774153773")
                 .title("JUnit実践入門")
                 .build();
@@ -165,9 +165,9 @@ class BookControllerTest {
 
     @Test
     void 一般ユーザーが書籍を登録した場合ステータスコード403が返却される() throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
-        String inputJson = "{ \"isbn13\": \"9784774153773\", \"title\": \"JUnit実践入門\" }";
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
+        var inputJson = "{ \"isbn13\": \"9784774153773\", \"title\": \"JUnit実践入門\" }";
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
@@ -185,8 +185,8 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/CreateBookValidationPass.csv", numLinesToSkip = 1)
     void 書籍を登録した場合バリデーションに成功する(String comment, String inputJson) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
         var book = Book.create(BookId.fromString("00000000-0000-0000-0001-000000000001"), Isbn13.of("1234567890123"), Title.of("DummyBook"));
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
@@ -206,8 +206,8 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/CreateBookValidationFail.csv", numLinesToSkip = 1)
     void 書籍を登録した場合バリデーションに失敗する(String comment, String inputJson) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
@@ -225,9 +225,9 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/BorrowBook.csv", numLinesToSkip = 1)
     void 書籍貸出を実施できる(String comment, String userid, String name, String password, String role) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser(userid, name, password, role);
-        String bookId = "00000000-0000-0000-0001-000000000001";
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser(userid, name, password, role);
+        var bookId = "00000000-0000-0000-0001-000000000001";
 
         var borrowBookInputData = BorrowBookInputData.builder()
                 .bookId(bookId)
@@ -248,8 +248,8 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/BorrowBookValidationFail.csv", numLinesToSkip = 1)
     void 書籍貸出時にバリデーションに失敗する(String comment, String bookId) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
@@ -264,9 +264,9 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/GiveBackBook.csv", numLinesToSkip = 1)
     void 書籍返却を実施できる(String comment, String userid, String name, String password, String role) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser(userid, name, password, role);
-        String bookId = "00000000-0000-0000-0001-000000000001";
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser(userid, name, password, role);
+        var bookId = "00000000-0000-0000-0001-000000000001";
 
         var giveBackBookInputData = GiveBackBookInputData.builder()
                 .bookId(bookId)
@@ -287,8 +287,8 @@ class BookControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/GiveBackBookValidationFail.csv", numLinesToSkip = 1)
     void 書籍返却時にバリデーションに失敗する(String comment, String bookId) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);

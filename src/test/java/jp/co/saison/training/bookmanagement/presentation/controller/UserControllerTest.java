@@ -46,24 +46,21 @@ class UserControllerTest {
 
     @Test
     void 管理ユーザはユーザー登録を呼び出しできる() throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
-        String inputJson = "{ \"name\": \"user\", \"password\": \"password\", \"role\": \"GeneralUser\" }";
-
-        CreateUserInputData createUserInputData = CreateUserInputData.builder()
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var inputJson = "{ \"name\": \"user\", \"password\": \"password\", \"role\": \"GeneralUser\" }";
+        var createUserInputData = CreateUserInputData.builder()
                 .name("user")
                 .password("password")
                 .role("GeneralUser")
                 .build();
-
-        User user = User.builder()
+        var user = User.builder()
                 .id(UserId.fromString("00000000-0000-0000-0000-000000000002"))
                 .name(Name.of("user"))
                 .password(Password.of("encodedpassword"))
                 .role(Role.GeneralUser)
                 .build();
-
-        String expectJson = "{ \"id\": \"00000000-0000-0000-0000-000000000002\", \"name\": \"user\", \"role\": \"GeneralUser\"}";
+        var expectJson = "{ \"id\": \"00000000-0000-0000-0000-000000000002\", \"name\": \"user\", \"role\": \"GeneralUser\"}";
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
@@ -82,9 +79,9 @@ class UserControllerTest {
 
     @Test
     void 一般ユーザがユーザー登録を実行するとステータスコード403が返却される() throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
-        String inputJson = "{ \"name\": \"user\", \"password\": \"password\", \"role\": \"GeneralUser\" }";
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "GeneralUser");
+        var inputJson = "{ \"name\": \"user\", \"password\": \"password\", \"role\": \"GeneralUser\" }";
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
@@ -102,18 +99,18 @@ class UserControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/CreateUserValidationPass.csv", numLinesToSkip = 1)
     void ユーザー登録時にバリデーションに成功する(String comment, String inputJson) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
-
-        doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
-        doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-
-        User user = User.builder()
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var user = User.builder()
                 .id(UserId.fromString("00000000-0000-0000-0000-000000000001"))
                 .name(Name.of("dummyuser"))
                 .password(Password.of("encodedpassword"))
                 .role(Role.GeneralUser)
                 .build();
+
+
+        doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
+        doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
         doReturn(user).when(createUserUsecaseInteractor).hundle(any(CreateUserInputData.class));
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
@@ -130,8 +127,8 @@ class UserControllerTest {
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/CreateUserValidationFail.csv", numLinesToSkip = 1)
     void ユーザー登録時にバリデーションに失敗するとステータスコード400が返却される(String comment, String inputJson) throws Exception {
-        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
+        var authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        var loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
