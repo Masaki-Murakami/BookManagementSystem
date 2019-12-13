@@ -9,8 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,6 +62,10 @@ class CreateUserUsecaseInteractorTest {
                 IllegalArgumentException.class,
                 () -> sut.hundle(createUserInputData)
         );
-        assertEquals("name already exists", exception.getMessage());
+        assertAll(
+                () -> assertEquals("name already exists", exception.getMessage()),
+                () -> verify(userRepository, never()).create(any())
+        );
+
     }
 }

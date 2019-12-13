@@ -2,6 +2,7 @@ package jp.co.saison.training.bookmanagement.application.usecases.createbook;
 
 import jp.co.saison.training.bookmanagement.application.usecases.findbook.FindBookUsecaseInteractor;
 import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book;
+import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.BookId;
 import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Isbn13;
 import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Title;
 import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
@@ -24,13 +25,19 @@ class CreateBookUsecaseInteractorTest {
     BookRepository bookRepository;
 
     @Test
-    void 書籍を登録できる(){
+    void 書籍を登録できる() {
         var createBookInputData = CreateBookInputData.builder()
-                .isbn13(Isbn13.of(""))
-                .title(Title.of(""))
-                .build():
-        var expectBook = Book.create()
+                .isbn13("9784774153773")
+                .title("JUnit実践入門")
+                .build();
+        var bookId = BookId.fromString("00000000-0000-0000-0001-000000000001");
+        var expectBook = Book.create(
+                bookId,
+                Isbn13.of("9784774153773"),
+                Title.of("JUnit実践入門")
+        );
 
+        doReturn(bookId).when(bookRepository).generateId();
         doNothing().when(bookRepository).create(expectBook);
 
         sut.hundle(createBookInputData);

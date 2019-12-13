@@ -128,55 +128,57 @@ InLending --> Lendable : 返却処理(giveBack)
 ### プレゼンテーションレイヤ
 
 #### UserController
+テスト対象は`jp.co.saison.training.bookmanagement.presentation.controller.UserController`
 ##### 利用者登録のテストケース(実装済み)
 | テストケース | 事後確認項目 |
 |--|--|
-| 管理者は利用者を登録APIを呼び出しできる | ・ステータスコードが200であること <br> ・レスポンスに登録した利用者を示すJSONが入っていること <br> ・ createUserUsecaseInteractor.hundleを適切な入力値を設定し、実行していること |
+| 管理者は利用者を登録APIを呼び出しできる | ・ステータスコードが200であること <br> ・レスポンスに登録した利用者を示すJSONが入っていること <br> ・ createUserUsecaseInteractorを適切な入力値を設定し、実行していること |
 | 一般ユーザーが利用者を登録実施した場合、ステータスコード403が返却される | ・レスポンスのステータスコードが403であること |
-| ユーザー名が32文字以下の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractor.hundleを呼び出していること |
-| パスワードが32文字以下の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractor.hundleを呼び出していること |
-| ロールが「Administrator」の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractor.hundleを呼び出していること |
-| ロールが「GeneralUser」の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractor.hundleを呼び出していること |
-| ユーザー名が33文字以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractor.hundleを呼び出されていないこと |
-| ユーザー名が空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractor.hundleを呼び出されていないこと |
+| ユーザー名が32文字以下の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractorを呼び出していること |
+| パスワードが32文字以下の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractorを呼び出していること |
+| ロールが「Administrator」の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractorを呼び出していること |
+| ロールが「GeneralUser」の場合、正常登録できる | ・ステータスコードが200であること <br> ・createUserUsecaseInteractorを呼び出していること |
+| ユーザー名が33文字以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractorを呼び出されていないこと |
+| ユーザー名が空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractorを呼び出されていないこと |
 | パスワードが33文字以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること |
-| パスワードが空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractor.hundleを呼び出されていないこと |
-| ロールが「Administrator」「GeneralUser」以外の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractor.hundleを呼び出されていないこと |
-| ロールが「Administrator」「GeneralUser」以外の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractor.hundleを呼び出されていないこと |
-| ロールが空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractor.hundleを呼び出されていないこと |
+| パスワードが空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractorを呼び出されていないこと |
+| ロールが「Administrator」「GeneralUser」以外の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractorを呼び出されていないこと |
+| ロールが「Administrator」「GeneralUser」以外の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractorを呼び出されていないこと |
+| ロールが空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・createUserUsecaseInteractorを呼び出されていないこと |
 
 #### BookController
-##### 書籍情報取得のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.presentation.controller.BookController`
+##### 書籍情報取得のテストケース(実装済み)
 | テストケース | 事後確認項目 |
 |--|--|
-| 管理者は書籍情報を取得できる | ・ステータスコードが200であること <br> ・レスポンスに指定した書籍を表すJSONが入っていること <br> ・ FindBookUsecaseInteractor.hundleを適切な入力値を設定し、実行していること |
-| 一般利用者は書籍情報を取得できる | ・ステータスコードが200であること <br> ・レスポンスに指定した書籍を表すJSONが入っていること <br> ・ FindBookUsecaseInteractor.hundleを適切な入力値を設定し、実行していること |
-| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> FindBookUsecaseInteractor.hundleを呼び出されていないこと |
-| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> FindBookUsecaseInteractor.hundleを呼び出されていないこと |
+| 管理者は書籍情報を取得できる | ・ステータスコードが200であること <br> ・レスポンスに指定した書籍を表すJSONが入っていること <br> ・ FindBookUsecaseInteractorを適切な入力値を設定し、実行していること |
+| 一般利用者は書籍情報を取得できる | ・ステータスコードが200であること <br> ・レスポンスに指定した書籍を表すJSONが入っていること <br> ・ FindBookUsecaseInteractorを適切な入力値を設定し、実行していること |
+| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・FindBookUsecaseInteractorを呼び出されていないこと |
+| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・FindBookUsecaseInteractorを呼び出されていないこと |
 
 ##### 書籍登録のテストケース
 | テストケース | 事後確認項目 |
 |--|--|
-| 管理者は書籍を登録できる | |
-| 一般ユーザーが書籍を登録した場合、ステータスコード403が返却される | |
-| isbn13が数字13桁の場合、登録できる | ・ステータスコードが200であること <br> ・ |
-| isbn13がnullの場合、登録できる | |
-| titleが32桁の場合、登録できる | |
-| isbn13が数字以外の13桁の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること |
-| isbn13が空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること|
-| isbn13が数字の12桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること |
-| isbn13が数字の14桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること |
-| titleが33桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること |
+| 管理者は書籍を登録できる | ・ステータスコードが200であること <br> ・レスポンスに登録した書籍を表すJSONが入っていること <br> ・ CreateBookUsecaseInteractorを適切な入力値を設定し、実行していること |
+| 一般ユーザーが書籍を登録した場合、ステータスコード403が返却される | ・レスポンスのステータスコードが403であること <br> ・CreateBookUsecaseInteractorが呼び出されていないこと |
+| isbn13が数字13桁の場合、登録できる | ・ステータスコードが200であること <br> ・CreateBookUsecaseInteractorが呼び出されていること |
+| isbn13がnullの場合、登録できる | ・ステータスコードが200であること <br> ・CreateBookUsecaseInteractorが呼び出されていること |
+| titleが32桁の場合、登録できる | ・ステータスコードが200であること <br> ・CreateBookUsecaseInteractorが呼び出されていること |
+| isbn13が数字以外の13桁の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・CreateBookUsecaseInteractorが呼び出されていないこと |
+| isbn13が空文字の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・CreateBookUsecaseInteractorが呼び出されていないこと |
+| isbn13が数字の12桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・CreateBookUsecaseInteractorが呼び出されていないこと |
+| isbn13が数字の14桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・CreateBookUsecaseInteractorが呼び出されていないこと |
+| titleが33桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・CreateBookUsecaseInteractorが呼び出されていないこと |
 
-#### 書籍貸出のテストケース
+##### 書籍貸出のテストケース
 | テストケース | 事後確認項目 |
 |--|--|
-| 管理者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・findBookUsecaseInteractorに想定のfindBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
-| 一般利用者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・findBookUsecaseInteractorに想定のfindBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
-| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・findBookUsecaseInteractorが呼び出されていないこと |
-| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・findBookUsecaseInteractorが呼び出されていないこと |
+| 管理者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・FindBookUsecaseInteractorに想定のFindBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
+| 一般利用者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・FindBookUsecaseInteractorに想定のFindBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
+| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・FindBookUsecaseInteractorが呼び出されていないこと |
+| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・FindBookUsecaseInteractorが呼び出されていないこと |
 
-#### 書籍返却のテストケース
+##### 書籍返却のテストケース
 | テストケース | 事後確認項目 |
 |--|--|
 | 管理者は書籍返却を実施できる | ・ステータスコードが200であること <br> ・BorrowBookUsecaseInteractorに想定のBorrowBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
@@ -186,40 +188,47 @@ InLending --> Lendable : 返却処理(giveBack)
 
 ### アプリケーションレイヤ
 #### 利用者を登録のテストケース(実装済み)
-| テストケース | 事後確認項目 |
-|--|--|
-| 正常に登録できる | |
-| 同一のユーザー名が存在する場合、例外が発生する | |
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.createuser.CreateUserUsecaseInteractor`
 
-#### 書籍情報取得のテストケース
 | テストケース | 事後確認項目 |
 |--|--|
-| 書籍情報を正常に取得できる | |
-| 書籍が存在しない場合、Optinal.emptyが返却される | |
+| 利用者を登録できる | ・UserRepository.createが想定のUserを引数に呼び出されていること |
+| 同一のユーザー名が存在する場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"name already exists"であること <br> ・UserRepository.createが呼び出されていないこと |
+
+#### 書籍情報取得のテストケース(実装済み)
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.findbook.FindBookUsecaseInteractor`
+
+| テストケース | 事後確認項目 |
+|--|--|
+| 書籍情報を正常に取得できる | ・戻り値が想定した戻り値であること <br> ・BookRepository.findByIdが想定した引数で呼ばれていること |
+| 書籍が存在しない場合、Optinal.emptyが返却される | ・戻り値がOptinal.emptyであること <br> ・BookRepository.findByIdが想定した引数で呼ばれていること |
 
 #### 書籍登録のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.createbook.CreateBookUsecaseInteractor`
 | テストケース | 事後確認項目 |
 |--|--|
-| 書籍を登録できる | |
+| 書籍を登録できる | ・BookRepository.createが想定した引数で呼ばれていること |
 
 #### 書籍貸出のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.borrowbook.BorrowBookUsecaseInteractor`
 | テストケース | 事後確認項目 |
 |--|--|
-| 書籍を貸出できる | |
-| 書籍が存在しない場合、例外が発生する | |
-| 利用者が存在しない場合、例外が発生する | |
-| 利用者が書籍を10冊以上借りていた場合、例外が発生する | |
+| 書籍を貸出できる | ・BookRepository.updateが想定したBorrowerId、StatusがInLendingに設定された引数で呼ばれていること |
+| 書籍が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"book not found"であること <br> ・BookRepository.updateが呼び出されていないこと |
+| 利用者が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrower not found"であること <br> ・BookRepository.updateが呼び出されていないこと |
+| 利用者が書籍を5冊以上借りていた場合、例外が発生する | ・IllegalStateExceptionが発生すること <br> ・例外のメッセージが"borrowed books must be up to 5"であること <br> ・BookRepository.updateが呼び出されていないこと |
 
 #### 書籍返却のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.borrowbook.GiveBackBookUsecaseInteractor`
 | テストケース | 事後確認項目 |
 |--|--|
-| 書籍を返却できる | |
-| 書籍が存在しない場合、例外が発生する | |
-| 利用者が書籍のBollowerIdと一致しない場合、例外が発生する | |
+| 書籍を返却できる | ・BookRepository.updateがBorrowerIdがnull、StatusがLendableに設定された引数で呼ばれていること |
+| 書籍が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"book not found"であること <br> BookRepository.updateが呼び出されていないこと |
+| 利用者が書籍のBollowerIdと一致しない場合例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrowerId does not match"であること <br> ・BookRepository.updateが呼び出されていないこと |
 
 ### ドメインレイヤ
 #### 書籍のテストケース(実装済み)
-
+テスト対象は`jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book`
 | 状態 | テストケース | 事後確認項目 |
 |--|--|--|
 | 生成前 | 書籍を生成できること | ・書籍IDが生成で指定した書籍IDであること <br> ・Isbn13が生成で指定したIsbn13であること <br> ・titleが生成で指定したtitleであること <br> ・statusがLendableであること <br> ・BorrowerIdが空であること |

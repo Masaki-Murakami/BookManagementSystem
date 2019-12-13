@@ -62,34 +62,6 @@ class BookControllerTest {
     @MockBean
     private LoginUserDetailsService loginUserDetailsService;
 
-//    @Test
-//    void 管理者は書籍情報を取得できる() throws Exception {
-//        String authorization = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-//        SimpleLoginUser loginUser = new SimpleLoginUser("00000000-0000-0000-0000-000000000001", "loginUser", "hashedpassword", "Administrator");
-//        String bookId = "00000000-0000-0000-0001-000000000001";
-//        String expectJson = "{\"id\":\"00000000-0000-0000-0001-000000000001\",\"isbn13\":\"9784774153773\",\"title\":\"JUnit実践入門\"}";
-//
-//        var findBookInputData = FindBookInputData.builder()
-//                .bookId(bookId)
-//                .build();
-//
-//        var book = Book.create(
-//                BookId.fromString(bookId),
-//                Isbn13.of("9784774153773"),
-//                Title.of("JUnit実践入門"));
-//
-//        doReturn(Optional.of(book)).when(findBookUsecaseInteractor).hundle(findBookInputData);
-//        doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
-//        doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-//
-//        mockMvc.perform(
-//                get("/api/books/{0}", bookId)
-//                        .header("Authorization", "Bearer " + authorization))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(expectJson, true));
-//        verify(findBookUsecaseInteractor, times(1)).hundle(findBookInputData);
-//    }
-
     @ParameterizedTest(name = "{0}")
     @CsvFileSource(resources = "/presentation/controller/FindBook.csv", numLinesToSkip = 1)
     void 書籍情報を取得できる(String comment, String userid, String name, String password, String role) throws Exception {
@@ -179,7 +151,7 @@ class BookControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isForbidden());
-        verify(createBookUsecaseInteractor, never()).hundle(any(CreateBookInputData.class));
+        verify(createBookUsecaseInteractor, never()).hundle(any());
     }
 
     @ParameterizedTest(name = "{0}")

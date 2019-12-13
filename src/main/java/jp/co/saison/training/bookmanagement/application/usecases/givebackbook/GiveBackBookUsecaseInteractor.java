@@ -7,6 +7,8 @@ import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.BookId;
 import jp.co.saison.training.bookmanagement.domain.model.useraggregate.UserId;
 import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,11 +21,12 @@ public class GiveBackBookUsecaseInteractor implements Usecase<GiveBackBookInputD
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Void hundle(GiveBackBookInputData giveBackBookInputData) {
         Book book = bookRepository.findById(BookId.fromString(giveBackBookInputData.getBookId()))
                 .orElseThrow(() -> new IllegalArgumentException("book not found"));
 
-        book.lend(UserId.fromString(giveBackBookInputData.getBookId()));
+        book.giveBack(UserId.fromString(giveBackBookInputData.getBorrowerId()));
 
         bookRepository.update(book);
         return null;

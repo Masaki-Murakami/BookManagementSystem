@@ -8,6 +8,8 @@ import jp.co.saison.training.bookmanagement.domain.model.useraggregate.User;
 import jp.co.saison.training.bookmanagement.domain.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CreateUserUsecaseInteractor implements Usecase<CreateUserInputData, User> {
@@ -20,6 +22,7 @@ public class CreateUserUsecaseInteractor implements Usecase<CreateUserInputData,
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public User hundle(CreateUserInputData inputData) {
         Name name = Name.of(inputData.getName());
         if(userRepository.existByName(name)){

@@ -1,7 +1,7 @@
 package jp.co.saison.training.bookmanagement.application.usecases.givebackbook;
 
-import jp.co.saison.training.bookmanagement.application.usecases.borrowbook.BorrowBookUsecaseInteractor;
-import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book;
+import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.*;
+import jp.co.saison.training.bookmanagement.domain.model.useraggregate.UserId;
 import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,24 +25,41 @@ class GiveBackBookUsecaseInteractorTest {
 
     @Test
     void 書籍を返却できる() {
-        var book = Book.create();
-        var expectBook = Book.create();
+        var giveBackBookInputData = GiveBackBookInputData.builder()
+                .bookId("00000000-0000-0000-0001-000000000001")
+                .borrowerId("00000000-0000-0000-0000-000000000001")
+                .build();
+        var book = Book.builder()
+                .id(BookId.fromString("00000000-0000-0000-0001-000000000001"))
+                .isbn13(Isbn13.of("9784774153773"))
+                .title(Title.of("JUnit実践入門"))
+                .status(BookStatus.InLending)
+                .borrowerId(UserId.fromString("00000000-0000-0000-0000-000000000001"))
+                .build();
+        var expectBook = Book.builder()
+                .id(BookId.fromString("00000000-0000-0000-0001-000000000001"))
+                .isbn13(Isbn13.of("9784774153773"))
+                .title(Title.of("JUnit実践入門"))
+                .status(BookStatus.Lendable)
+                .borrowerId(null)
+                .build();
 
-        var giveBackBookInputData = GiveBackBookInputData;
-
-        doReturn(Optional.of(book)).when(bookRepository).findById(book.getBookId());
+        doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
         doNothing().when(bookRepository).update(expectBook);
 
         sut.hundle(giveBackBookInputData);
 
-        verify(bookRepository, times(1)).update(argThat(book -> book.getStatus()));
+        verify(bookRepository, times(1)).update(expectBook);
     }
 
     @Test
     void 書籍が存在しない場合例外が発生する() {
-        var giveBackBookInputData = GiveBackBookInputData;
+        var giveBackBookInputData = GiveBackBookInputData.builder()
+                .bookId("00000000-0000-0000-0001-000000000001")
+                .borrowerId("00000000-0000-0000-0000-000000000001")
+                .build();
 
-        doReturn(Optional.empty()).when(bookRepository).findById(book.getBookId());
+        doReturn(Optional.empty()).when(bookRepository).findById(BookId.fromString("00000000-0000-0000-0001-000000000001"));
         var exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> sut.hundle(giveBackBookInputData)
@@ -56,14 +73,26 @@ class GiveBackBookUsecaseInteractorTest {
 
     @Test
     void 利用者が書籍のBollowerIdと一致しない場合例外が発生する() {
+        var giveBackBookInputData = GiveBackBookInputData.builder()
+                .bookId("00000000-0000-0000-0001-000000000001")
+                .borrowerId("00000000-0000-0000-0000-000000000001")
+                .build();
+        var book = Book.builder()
+                .id(BookId.fromString("00000000-0000-0000-0001-000000000001"))
+                .isbn13(Isbn13.of("9784774153773"))
+                .title(Title.of("JUnit実践入門"))
+                .status(BookStatus.InLending)
+                .borrowerId(UserId.fromString("00000000-0000-0000-0000-000000000002"))
+                .build();
+
+        doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
 
         var exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> sut.hundle(giveBackBookInputData)
         );
-
         assertAll(
-                () -> assertEquals("book not found", exception.getMessage()),
+                () -> assertEquals("borrowerId does not match", exception.getMessage()),
                 () -> verify(bookRepository, never()).update(any())
         );
     }
