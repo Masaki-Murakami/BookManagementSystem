@@ -7,7 +7,7 @@
 ![](assets/IntelliJAddConf_3.png)  
 1. 左上のRunボタンを押し、実行する  
 ![](assets/IntelliJStartApp.png)  
-1. Stopボタンを押し、実行する  
+1. 停止する場合は、Stopボタンを押す  
 ![](assets/IntelliJStopApp.png)  
 
 ## ブランチ作成手順
