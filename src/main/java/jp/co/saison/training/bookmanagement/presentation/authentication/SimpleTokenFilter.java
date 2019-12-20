@@ -37,7 +37,6 @@ public class SimpleTokenFilter extends GenericFilterBean {
                     .orElseThrow(() -> new UsernameNotFoundException("user not found by token"));
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(simpleLoginUser, null, simpleLoginUser.getAuthorities()));
         } catch (UsernameNotFoundException | JWTVerificationException e) {
-//            log.error("verify token error", e);
             SecurityContextHolder.clearContext();
             ((HttpServletResponse) response).sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
         }

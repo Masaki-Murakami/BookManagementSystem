@@ -9,6 +9,7 @@ import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book;
 import jp.co.saison.training.bookmanagement.presentation.authentication.SimpleLoginUser;
 import jp.co.saison.training.bookmanagement.presentation.dto.BookDto;
 import jp.co.saison.training.bookmanagement.presentation.form.CreateBookForm;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}")
+    @Secured("ROLE_GeneralUser")
     public BookDto findBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @PathVariable("bookId") @Valid @Size(min = 36, max = 36) String bookId) {
@@ -49,6 +51,7 @@ public class BookController {
     }
 
     @PostMapping("")
+    @Secured("ROLE_Administrator")
     public BookDto createBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @RequestBody @Valid CreateBookForm createBookForm) {
@@ -61,6 +64,7 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}/borrow")
+    @Secured("ROLE_GeneralUser")
     public void borrowBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @PathVariable("bookId") @Valid @Size(min = 36, max = 36) String bookId) {
@@ -72,6 +76,7 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}/giveback")
+    @Secured("ROLE_GeneralUser")
     public void giveBackBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @PathVariable("bookId") @Valid @Size(min = 36, max = 36) String bookId) {

@@ -6,6 +6,7 @@ import jp.co.saison.training.bookmanagement.presentation.authentication.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled=true, securedEnabled=true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final LoginUserDetailsService loginUserDetailsService;
     private final SimpleTokenFilter simpleTokenFilter;
@@ -38,12 +40,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .mvcMatchers("/logout")
                 .authenticated()
-                .mvcMatchers("/api/books")
-                .hasRole(Role.Administrator.name())
-                .mvcMatchers("/api/books/**")
-                .hasRole(Role.GeneralUser.name())
-                .mvcMatchers("/api/users/**")
-                .hasRole(Role.Administrator.name())
+//                .mvcMatchers("/api/books")
+//                .hasRole(Role.Administrator.name())
+//                .mvcMatchers("/api/books/**")
+//                .hasRole(Role.GeneralUser.name())
+//                .mvcMatchers("/api/users/**")
+//                .hasRole(Role.Administrator.name())
                 .anyRequest()
                 .permitAll()
                 .and()

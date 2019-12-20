@@ -9,6 +9,8 @@ import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
 import jp.co.saison.training.bookmanagement.domain.repositories.BorrowerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,8 +34,9 @@ class BorrowBookUsecaseInteractorTest {
     @Mock
     BorrowerRepository borrowerRepository;
 
-    @Test
-    void 書籍を貸出できる() {
+    @ParameterizedTest(name = "{0}")
+    @CsvFileSource(resources = "/application/usecases/borrowbook/BorrowBook.csv", numLinesToSkip = 1)
+    void 書籍を貸出できる(String comment, int bookSize) {
         var borrowBookInputData = BorrowBookInputData.builder()
                 .bookId("00000000-0000-0000-0001-000000000001")
                 .borrowerId("00000000-0000-0000-0000-000000000001")
@@ -43,13 +46,15 @@ class BorrowBookUsecaseInteractorTest {
                 Isbn13.of("9784774153773"),
                 Title.of("JUnit実践入門")
         );
+        List<Book> borrowBooks = mock(List.class);
         var borrower = Borrower.builder()
                 .id(UserId.fromString("00000000-0000-0000-0000-000000000001"))
                 .name(Name.of("user"))
                 .role(Role.GeneralUser)
-                .borrowBooks(new ArrayList<>())
+                .borrowBooks(borrowBooks)
                 .build();
 
+        doReturn(bookSize).when(borrowBooks).size();
         doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
         doReturn(Optional.of(borrower)).when(borrowerRepository).findById(borrower.getId());
         doNothing().when(bookRepository).update(any());
