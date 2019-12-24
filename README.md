@@ -100,19 +100,19 @@
   
 | テストケース | 事後確認項目 |
 |--|--|
-| 管理者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・FindBookUsecaseInteractorに想定のFindBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
-| 一般利用者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・FindBookUsecaseInteractorに想定のFindBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
-| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・FindBookUsecaseInteractorが呼び出されていないこと |
-| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・FindBookUsecaseInteractorが呼び出されていないこと |
+| 管理者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・BorrowBookUsecaseInteractorに想定のBorrowBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
+| 一般利用者は書籍貸出を実施できる | ・ステータスコードが200であること <br> ・BorrowBookUsecaseInteractorに想定のBorrowBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
+| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・BorrowBookUsecaseInteractorが呼び出されていないこと |
+| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・BorrowBookUsecaseInteractorが呼び出されていないこと |
   
 #####  書籍返却のテストケース
   
 | テストケース | 事後確認項目 |
 |--|--|
-| 管理者は書籍返却を実施できる | ・ステータスコードが200であること <br> ・BorrowBookUsecaseInteractorに想定のBorrowBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
-| 一般利用者は書籍返却を実施できる | ・ステータスコードが200であること <br> ・BorrowBookUsecaseInteractorに想定のBorrowBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
-| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・BorrowBookUsecaseInteractorが呼び出されていないこと |
-| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・BorrowBookUsecaseInteractorが呼び出されていないこと |
+| 管理者は書籍返却を実施できる | ・ステータスコードが200であること <br> ・GiveBackBookUsecaseInteractorに想定のGiveBackBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
+| 一般利用者は書籍返却を実施できる | ・ステータスコードが200であること <br> ・GiveBackBookUsecaseInteractorに想定のGiveBackBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
+| bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・GiveBackBookUsecaseInteractorが呼び出されていないこと |
+| bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・GiveBackBookUsecaseInteractorが呼び出されていないこと |
   
 ###  アプリケーションレイヤ
   
