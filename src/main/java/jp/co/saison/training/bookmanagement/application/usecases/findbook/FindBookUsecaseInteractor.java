@@ -20,7 +20,7 @@ public class FindBookUsecaseInteractor implements Usecase<FindBookInputData, Opt
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Book> hundle(FindBookInputData findBookInputData) {
+    public Optional<Book> handle(FindBookInputData findBookInputData) {
         return bookRepository.findById(BookId.fromString(findBookInputData.getBookId()));
     }
 }

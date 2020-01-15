@@ -47,7 +47,7 @@ class GiveBackBookUsecaseInteractorTest {
         doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
         doNothing().when(bookRepository).update(expectBook);
 
-        sut.hundle(giveBackBookInputData);
+        sut.handle(giveBackBookInputData);
 
         verify(bookRepository, times(1)).update(expectBook);
     }
@@ -62,7 +62,7 @@ class GiveBackBookUsecaseInteractorTest {
         doReturn(Optional.empty()).when(bookRepository).findById(BookId.fromString("00000000-0000-0000-0001-000000000001"));
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.hundle(giveBackBookInputData)
+                () -> sut.handle(giveBackBookInputData)
         );
 
         assertAll(
@@ -89,7 +89,7 @@ class GiveBackBookUsecaseInteractorTest {
 
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.hundle(giveBackBookInputData)
+                () -> sut.handle(giveBackBookInputData)
         );
         assertAll(
                 () -> assertEquals("borrowerId does not match", exception.getMessage()),
