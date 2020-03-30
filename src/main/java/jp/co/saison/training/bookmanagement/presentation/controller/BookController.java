@@ -46,7 +46,7 @@ public class BookController {
         FindBookInputData findBookInputData = FindBookInputData.builder()
                 .bookId(bookId)
                 .build();
-        Book book = findBookUsecase.handle(findBookInputData).orElseThrow();
+        Book book = findBookUsecase.hundle(findBookInputData).orElseThrow();
         return BookDto.fromModel(book);
     }
 
@@ -59,7 +59,7 @@ public class BookController {
                 .isbn13(createBookForm.getIsbn13())
                 .title(createBookForm.getTitle())
                 .build();
-        Book book = createBookUsecase.handle(createBookInputData);
+        Book book = createBookUsecase.hundle(createBookInputData);
         return BookDto.fromModel(book);
     }
 
@@ -72,7 +72,7 @@ public class BookController {
                 .borrowerId(simpleLoginUser.getUserId())
                 .bookId(bookId)
                 .build();
-        borrowBookUsecase.handle(borrowBookInputData);
+        borrowBookUsecase.hundle(borrowBookInputData);
     }
 
     @PutMapping("/{bookId}/giveback")
@@ -84,6 +84,6 @@ public class BookController {
                 .borrowerId(simpleLoginUser.getUserId())
                 .bookId(bookId)
                 .build();
-        giveBackBookUsecase.handle(giveBackBookInputData);
+        giveBackBookUsecase.hundle(giveBackBookInputData);
     }
 }

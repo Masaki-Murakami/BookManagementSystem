@@ -30,7 +30,7 @@ public class UserController {
                 .password(createUserForm.getPassword())
                 .role(createUserForm.getRole())
                 .build();
-        User user = createUserUsecase.handle(createUserInputData);
+        User user = createUserUsecase.hundle(createUserInputData);
         return UserDto.fromModel(user);
     }
 }

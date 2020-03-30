@@ -21,7 +21,6 @@ class GiveBackBookUsecaseInteractorTest {
 
     @Mock
     BookRepository bookRepository;
-    private IllegalArgumentException exception;
 
     @Test
     void 書籍を返却できる() {
@@ -47,7 +46,7 @@ class GiveBackBookUsecaseInteractorTest {
         doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
         doNothing().when(bookRepository).update(expectBook);
 
-        sut.handle(giveBackBookInputData);
+        sut.hundle(giveBackBookInputData);
 
         verify(bookRepository, times(1)).update(expectBook);
     }
@@ -62,7 +61,7 @@ class GiveBackBookUsecaseInteractorTest {
         doReturn(Optional.empty()).when(bookRepository).findById(BookId.fromString("00000000-0000-0000-0001-000000000001"));
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.handle(giveBackBookInputData)
+                () -> sut.hundle(giveBackBookInputData)
         );
 
         assertAll(
@@ -89,7 +88,7 @@ class GiveBackBookUsecaseInteractorTest {
 
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.handle(giveBackBookInputData)
+                () -> sut.hundle(giveBackBookInputData)
         );
         assertAll(
                 () -> assertEquals("borrowerId does not match", exception.getMessage()),

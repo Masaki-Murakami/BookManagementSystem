@@ -81,14 +81,14 @@ class BookControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(Optional.of(book)).when(findBookUsecaseInteractor).handle(findBookInputData);
+        doReturn(Optional.of(book)).when(findBookUsecaseInteractor).hundle(findBookInputData);
 
         mockMvc.perform(
                 get("/api/books/{0}", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectJson, true));
-        verify(findBookUsecaseInteractor, times(1)).handle(findBookInputData);
+        verify(findBookUsecaseInteractor, times(1)).hundle(findBookInputData);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -104,7 +104,7 @@ class BookControllerTest {
                 get("/api/books/{0}", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isBadRequest());
-        verify(findBookUsecaseInteractor, never()).handle(any(FindBookInputData.class));
+        verify(findBookUsecaseInteractor, never()).hundle(any(FindBookInputData.class));
     }
 
     @Test
@@ -122,7 +122,7 @@ class BookControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(book).when(createBookUsecaseInteractor).handle(createBookInputData);
+        doReturn(book).when(createBookUsecaseInteractor).hundle(createBookInputData);
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
         mockMvc.perform(
@@ -132,7 +132,7 @@ class BookControllerTest {
                         .content(inputJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectJson, true));
-        verify(createBookUsecaseInteractor, times(1)).handle(createBookInputData);
+        verify(createBookUsecaseInteractor, times(1)).hundle(createBookInputData);
     }
 
     @Test
@@ -151,7 +151,7 @@ class BookControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isForbidden());
-        verify(createBookUsecaseInteractor, never()).handle(any());
+        verify(createBookUsecaseInteractor, never()).hundle(any());
     }
 
     @ParameterizedTest(name = "{0}")
@@ -163,7 +163,7 @@ class BookControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(book).when(createBookUsecaseInteractor).handle(any(CreateBookInputData.class));
+        doReturn(book).when(createBookUsecaseInteractor).hundle(any(CreateBookInputData.class));
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
         mockMvc.perform(
@@ -172,7 +172,7 @@ class BookControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isOk());
-        verify(createBookUsecaseInteractor, times(1)).handle(any(CreateBookInputData.class));
+        verify(createBookUsecaseInteractor, times(1)).hundle(any(CreateBookInputData.class));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -191,7 +191,7 @@ class BookControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isBadRequest());
-        verify(createBookUsecaseInteractor, never()).handle(any(CreateBookInputData.class));
+        verify(createBookUsecaseInteractor, never()).hundle(any(CreateBookInputData.class));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -208,13 +208,13 @@ class BookControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doNothing().when(borrowBookUsecaseInteractor).handle(borrowBookInputData);
+        doNothing().when(borrowBookUsecaseInteractor).hundle(borrowBookInputData);
 
         mockMvc.perform(
                 put("/api/books/{0}/borrow", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isOk());
-        verify(borrowBookUsecaseInteractor, times(1)).handle(borrowBookInputData);
+        verify(borrowBookUsecaseInteractor, times(1)).hundle(borrowBookInputData);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -230,7 +230,7 @@ class BookControllerTest {
                 put("/api/books/{0}/borrow", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isBadRequest());
-        verify(borrowBookUsecaseInteractor, never()).handle(any(BorrowBookInputData.class));
+        verify(borrowBookUsecaseInteractor, never()).hundle(any(BorrowBookInputData.class));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -247,13 +247,13 @@ class BookControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doNothing().when(giveBackBookUsecaseInteractor).handle(giveBackBookInputData);
+        doNothing().when(giveBackBookUsecaseInteractor).hundle(giveBackBookInputData);
 
         mockMvc.perform(
                 put("/api/books/{0}/giveback", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isOk());
-        verify(giveBackBookUsecaseInteractor, times(1)).handle(giveBackBookInputData);
+        verify(giveBackBookUsecaseInteractor, times(1)).hundle(giveBackBookInputData);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -269,6 +269,6 @@ class BookControllerTest {
                 put("/api/books/{0}/giveback", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isBadRequest());
-        verify(giveBackBookUsecaseInteractor, never()).handle(any(GiveBackBookInputData.class));
+        verify(giveBackBookUsecaseInteractor, never()).hundle(any(GiveBackBookInputData.class));
     }
 }

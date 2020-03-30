@@ -5,7 +5,6 @@ import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book;
 import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.BookId;
 import jp.co.saison.training.bookmanagement.domain.repositories.BookRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -20,7 +19,7 @@ public class FindBookUsecaseInteractor implements Usecase<FindBookInputData, Opt
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Book> handle(FindBookInputData findBookInputData) {
+    public Optional<Book> hundle(FindBookInputData findBookInputData) {
         return bookRepository.findById(BookId.fromString(findBookInputData.getBookId()));
     }
 }

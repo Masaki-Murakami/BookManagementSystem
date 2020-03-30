@@ -37,7 +37,7 @@ class CreateBookUsecaseInteractorTest {
         doReturn(bookId).when(bookRepository).generateId();
         doNothing().when(bookRepository).create(expectBook);
 
-        sut.handle(createBookInputData);
+        sut.hundle(createBookInputData);
 
         verify(bookRepository, times(1)).create(expectBook);
     }

@@ -23,7 +23,7 @@ public class BorrowBookUsecaseInteractor implements Usecase<BorrowBookInputData,
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Void handle(BorrowBookInputData inputData) {
+    public Void hundle(BorrowBookInputData inputData) {
         Book book = bookRepository.findById(BookId.fromString(inputData.getBookId()))
                 .orElseThrow(() -> new IllegalArgumentException("book not found"));
         Borrower borrower = borrowerRepository.findById(UserId.fromString(inputData.getBorrowerId()))

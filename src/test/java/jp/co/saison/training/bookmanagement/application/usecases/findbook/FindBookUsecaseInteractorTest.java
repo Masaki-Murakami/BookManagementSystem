@@ -38,7 +38,7 @@ class FindBookUsecaseInteractorTest {
 
         doReturn(Optional.of(expectBook)).when(bookRepository).findById(expectBook.getId());
 
-        var resultBook = sut.handle(findBookInputData).orElseThrow();
+        var resultBook = sut.hundle(findBookInputData).orElseThrow();
 
         assertAll(
                 () -> assertEquals(expectBook, resultBook),
@@ -55,7 +55,7 @@ class FindBookUsecaseInteractorTest {
 
         doReturn(Optional.empty()).when(bookRepository).findById(bookId);
 
-        var result = sut.handle(findBookInputData);
+        var result = sut.hundle(findBookInputData);
 
         assertAll(
                 () -> assertEquals(Optional.empty(), result),

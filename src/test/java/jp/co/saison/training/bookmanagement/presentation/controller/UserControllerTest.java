@@ -10,7 +10,8 @@ import jp.co.saison.training.bookmanagement.presentation.authentication.SimpleTo
 import jp.co.saison.training.bookmanagement.presentation.config.SecurityConfig;
 import jp.co.saison.training.bookmanagement.presentation.config.SpringSecurityConfig;
 import jp.co.saison.training.bookmanagement.presentation.handler.ConstraintViolationExceptionHandler;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -64,7 +65,7 @@ class UserControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(user).when(createUserUsecaseInteractor).handle(createUserInputData);
+        doReturn(user).when(createUserUsecaseInteractor).hundle(createUserInputData);
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
         mockMvc.perform(
@@ -74,7 +75,7 @@ class UserControllerTest {
                         .content(inputJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectJson, true));
-        verify(createUserUsecaseInteractor, times(1)).handle(createUserInputData);
+        verify(createUserUsecaseInteractor, times(1)).hundle(createUserInputData);
     }
 
     @Test
@@ -93,7 +94,7 @@ class UserControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isForbidden());
-        verify(createUserUsecaseInteractor, never()).handle(any(CreateUserInputData.class));
+        verify(createUserUsecaseInteractor, never()).hundle(any(CreateUserInputData.class));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -110,7 +111,7 @@ class UserControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(user).when(createUserUsecaseInteractor).handle(any(CreateUserInputData.class));
+        doReturn(user).when(createUserUsecaseInteractor).hundle(any(CreateUserInputData.class));
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
         mockMvc.perform(
@@ -119,7 +120,7 @@ class UserControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isOk());
-        verify(createUserUsecaseInteractor, times(1)).handle(any(CreateUserInputData.class));
+        verify(createUserUsecaseInteractor, times(1)).hundle(any(CreateUserInputData.class));
     }
 
     @Tag("異常系")
