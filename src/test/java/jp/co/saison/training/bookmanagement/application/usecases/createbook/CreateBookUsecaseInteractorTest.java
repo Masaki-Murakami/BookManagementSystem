@@ -35,10 +35,10 @@ class CreateBookUsecaseInteractorTest {
         );
 
         doReturn(bookId).when(bookRepository).generateId();
-        doNothing().when(bookRepository).create(expectBook);
+        doNothing().when(bookRepository).save(expectBook);
 
         sut.hundle(createBookInputData);
 
-        verify(bookRepository, times(1)).create(expectBook);
+        verify(bookRepository, times(1)).save(expectBook);
     }
 }

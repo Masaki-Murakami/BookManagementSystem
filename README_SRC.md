@@ -18,6 +18,102 @@
 * インフラストラクチャレイヤ  
 データアクセスの抽象化、CRUD処理の提供  
 
+
+## モデル
+
+### 要件モデル
+
+```plantuml
+left to right direction
+
+actor 利用者
+actor 管理者
+
+rectangle 要件 {
+  note right of 利用者 : 書籍の情報を取得することができる
+  note right of 利用者 : 書籍を借りることができる
+  note right of 利用者 : 書籍を返却することができる
+'  note right of 利用者 : 書籍にコメントを投稿できる
+'  note right of 利用者 : 書籍のコメントを削除できる
+'  note right of 利用者 : 書籍貸し出し期限を過ぎるとメール連絡される
+  note right of 管理者 : 書籍を登録できる
+  note right of 管理者 : 利用者を登録できる
+'  note right of 管理者 : 書籍へのコメントを削除できる
+}
+
+```
+
+### クラス図
+
+```plantuml
+package 書籍 <<Frame>> {
+  '書籍
+  class Book <<Entity>>{
+    '   書籍ID
+    - id : BookId
+    '   タイトル
+    - title : Title
+    '   Isbn13
+    - isbn13 : Isbn13
+    '   BookStatus
+    - status : BookStatus
+    '   BookStatus
+    - borrowerId : Optional<UserId>
+  }
+
+  '書籍ステータス
+  enum BookStatus <<ValueObject>>{
+    '   貸出可能
+    - Lendable
+    '   貸出中
+    - InLending
+  }
+}
+
+package ユーザー <<Frame>> {
+  'ユーザー
+  class User <<Entity>>{
+    '   書籍ID
+    - id : UserId
+    '   タイトル
+    - userName : UserName
+    '   BookStatus
+    - role : Role
+  }
+
+  class UserId <<ValueObject>> {
+    - userId : UUID
+  }
+
+  'Role
+  enum Role <<ValueObject>> {
+    '   一般利用者
+    - GeneralUser
+    '   管理者
+    - Adminstorator
+  }
+}
+
+Book -down- BookStatus
+Book -right- UserId
+User -left- UserId
+User -down- Role
+
+```
+
+### 状態遷移図
+
+```plantuml
+state "貸出可能（Lendable）" as Lendable
+state "貸出中（InLending）" as InLending
+
+[*] --> Lendable : 生成(create)
+Lendable --> InLending : 貸出処理(lend)
+InLending --> Lendable : 返却処理(giveBack)
+
+```
+
+
 ## テスト観点
 ### プレゼンテーションレイヤ
 * 認証機能のテスト
@@ -155,93 +251,3 @@
 ### インフラストラクチャレイヤ
 ORMの機能確認になるため、今回は省略する。  
 一部ロジックがあるので、本来ならその部分はテストしたほうが良い。  
-
-## モデル
-
-### 要件モデル
-
-```plantuml
-left to right direction
-
-actor 利用者
-actor 管理者
-
-rectangle 要件 {
-  note right of 利用者 : 書籍の情報を取得することができる
-  note right of 利用者 : 書籍を借りることができる
-  note right of 利用者 : 書籍を返却することができる
-  note right of 管理者 : 書籍を登録できる
-  note right of 管理者 : 利用者を登録できる
-}
-
-```
-
-### クラス図
-
-```plantuml
-package 書籍 <<Frame>> {
-  '書籍
-  class Book <<Entity>>{
-    '   書籍ID
-    - id : BookId
-    '   タイトル
-    - title : Title
-    '   Isbn13
-    - isbn13 : Isbn13
-    '   BookStatus
-    - status : BookStatus
-    '   BookStatus
-    - borrowerId : Optional<UserId>
-  }
-
-  '書籍ステータス
-  enum BookStatus <<ValueObject>>{
-    '   貸出可能
-    - Lendable
-    '   貸出中
-    - InLending
-  }
-}
-
-package ユーザー <<Frame>> {
-  'ユーザー
-  class User <<Entity>>{
-    '   書籍ID
-    - id : UserId
-    '   タイトル
-    - userName : UserName
-    '   BookStatus
-    - role : Role
-  }
-
-  class UserId <<ValueObject>> {
-    - userId : UUID
-  }
-
-  'Role
-  enum Role <<ValueObject>> {
-    '   一般利用者
-    - GeneralUser
-    '   管理者
-    - Adminstorator
-  }
-}
-
-Book -down- BookStatus
-Book -right- UserId
-User -left- UserId
-User -down- Role
-
-```
-
-### 状態遷移図
-
-```plantuml
-state "貸出可能（Lendable）" as Lendable
-state "貸出中（InLending）" as InLending
-
-[*] --> Lendable : 生成(create)
-Lendable --> InLending : 貸出処理(lend)
-InLending --> Lendable : 返却処理(giveBack)
-
-```

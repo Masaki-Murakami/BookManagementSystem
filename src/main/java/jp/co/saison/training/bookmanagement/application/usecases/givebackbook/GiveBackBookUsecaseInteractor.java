@@ -25,7 +25,7 @@ public class GiveBackBookUsecaseInteractor implements Usecase<GiveBackBookInputD
 
         book.giveBack(UserId.fromString(giveBackBookInputData.getBorrowerId()));
 
-        bookRepository.update(book);
+        bookRepository.save(book);
         return null;
     }
 }

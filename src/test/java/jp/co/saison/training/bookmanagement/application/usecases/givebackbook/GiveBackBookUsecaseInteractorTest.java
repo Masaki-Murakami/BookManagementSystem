@@ -44,11 +44,11 @@ class GiveBackBookUsecaseInteractorTest {
                 .build();
 
         doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
-        doNothing().when(bookRepository).update(expectBook);
+        doNothing().when(bookRepository).save(expectBook);
 
         sut.hundle(giveBackBookInputData);
 
-        verify(bookRepository, times(1)).update(expectBook);
+        verify(bookRepository, times(1)).save(expectBook);
     }
 
     @Test
@@ -66,7 +66,7 @@ class GiveBackBookUsecaseInteractorTest {
 
         assertAll(
                 () -> assertEquals("book not found", exception.getMessage()),
-                () -> verify(bookRepository, never()).update(any())
+                () -> verify(bookRepository, never()).save(any())
         );
     }
 
@@ -92,7 +92,7 @@ class GiveBackBookUsecaseInteractorTest {
         );
         assertAll(
                 () -> assertEquals("borrowerId does not match", exception.getMessage()),
-                () -> verify(bookRepository, never()).update(any())
+                () -> verify(bookRepository, never()).save(any())
         );
     }
 }

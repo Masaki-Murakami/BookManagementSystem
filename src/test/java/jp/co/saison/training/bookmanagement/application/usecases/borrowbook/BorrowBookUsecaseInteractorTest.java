@@ -56,11 +56,11 @@ class BorrowBookUsecaseInteractorTest {
         doReturn(bookSize).when(borrowBooks).size();
         doReturn(Optional.of(book)).when(bookRepository).findById(book.getId());
         doReturn(Optional.of(borrower)).when(borrowerRepository).findById(borrower.getId());
-        doNothing().when(bookRepository).update(any());
+        doNothing().when(bookRepository).save(any());
 
         sut.hundle(borrowBookInputData);
 
-        verify(bookRepository, times(1)).update(argThat(updatedBook -> {
+        verify(bookRepository, times(1)).save(argThat(updatedBook -> {
             return updatedBook.getBorrowerId().orElseThrow().equals(UserId.fromString("00000000-0000-0000-0000-000000000001"))
                     && updatedBook.getStatus() == BookStatus.InLending;
         }));
@@ -82,7 +82,7 @@ class BorrowBookUsecaseInteractorTest {
 
         assertAll(
                 () -> assertEquals("book not found", exception.getMessage()),
-                () -> verify(bookRepository, never()).update(any())
+                () -> verify(bookRepository, never()).save(any())
         );
     }
 
@@ -108,7 +108,7 @@ class BorrowBookUsecaseInteractorTest {
 
         assertAll(
                 () -> assertEquals("borrower not found", exception.getMessage()),
-                () -> verify(bookRepository, never()).update(any())
+                () -> verify(bookRepository, never()).save(any())
         );
     }
 
@@ -142,7 +142,7 @@ class BorrowBookUsecaseInteractorTest {
 
         assertAll(
                 () -> assertEquals("borrowed books must be up to 5", exception.getMessage()),
-                () -> verify(bookRepository, never()).update(any())
+                () -> verify(bookRepository, never()).save(any())
         );
     }
 }

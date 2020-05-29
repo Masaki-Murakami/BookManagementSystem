@@ -45,7 +45,7 @@ class CreateUserUsecaseInteractorTest {
 
         sut.hundle(createUserInputData);
 
-        verify(userRepository, times(1)).create(expectedUser);
+        verify(userRepository, times(1)).save(expectedUser);
     }
 
     @Test
@@ -64,7 +64,7 @@ class CreateUserUsecaseInteractorTest {
         );
         assertAll(
                 () -> assertEquals("name already exists", exception.getMessage()),
-                () -> verify(userRepository, never()).create(any())
+                () -> verify(userRepository, never()).save(any())
         );
 
     }

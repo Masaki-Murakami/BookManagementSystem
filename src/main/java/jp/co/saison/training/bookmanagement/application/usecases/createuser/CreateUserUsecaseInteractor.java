@@ -35,7 +35,7 @@ public class CreateUserUsecaseInteractor implements Usecase<CreateUserInputData,
                 .role(Role.valueOf(inputData.getRole()))
                 .password(Password.of(passwordEncoder.encode(inputData.getPassword())))
                 .build();
-        userRepository.create(user);
+        userRepository.save(user);
         return user;
     }
 }

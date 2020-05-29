@@ -55,7 +55,7 @@ class JpaBookRepositoryTest {
                 .status(BookStatus.Lendable)
                 .build();
 
-        sut.create(book);
+        sut.save(book);
 
         var savedBook = sut.findById(bookId).orElseThrow();
         assertEquals(book, savedBook);

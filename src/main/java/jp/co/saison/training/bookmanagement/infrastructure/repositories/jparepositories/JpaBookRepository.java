@@ -9,7 +9,6 @@ import jp.co.saison.training.bookmanagement.infrastructure.repositories.gateway.
 import jp.co.saison.training.bookmanagement.infrastructure.repositories.gateway.jpagateway.UserJpaGateway;
 import jp.co.saison.training.bookmanagement.infrastructure.repositories.gateway.jpagateway.jpamodel.BookJpaModel;
 import jp.co.saison.training.bookmanagement.infrastructure.repositories.gateway.jpagateway.jpamodel.UserJpaModel;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -26,13 +25,30 @@ public class JpaBookRepository implements BookRepository {
     }
 
     //この部分はfactoryで実装するべき
-    public static Book convertBookJpaModelToBook(BookJpaModel bookJpaModel) {
-
+    private static Book convertBookJpaModelToBook(BookJpaModel bookJpaModel) {
         return Book.create(
                 BookId.fromString(bookJpaModel.getId()),
                 bookJpaModel.getIsbn13() == null ? null : Isbn13.of(bookJpaModel.getIsbn13()),
                 Title.of(bookJpaModel.getTitle())
         );
+    }
+
+    private BookJpaModel convertBookToBookJpaModel(Book book) {
+        UserJpaModel borrower = null;
+        if (book.getBorrowerId().isPresent()) {
+            borrower = userJpaGateway.findById(book.getBorrowerId().toString())
+                    .orElseThrow(() -> new IllegalStateException("User not found"));
+        }
+
+        BookJpaModel bookJpaModel = BookJpaModel.builder()
+                .id(book.getId().toString())
+                .title(book.getTitle().toString())
+                .isbn13(book.getIsbn13().map(Isbn13::toString).orElseThrow())
+                .borrower(borrower)
+                .status(book.getStatus().name())
+                .build();
+
+        return bookJpaModel;
     }
 
     @Override
@@ -47,35 +63,8 @@ public class JpaBookRepository implements BookRepository {
     }
 
     @Override
-    public void create(Book book) {
-        if(bookJpaGateway.existsById(book.getId().toString())){
-            throw new IllegalArgumentException();
-        }
-        if(book.getBorrowerId().isPresent()){
-            throw new IllegalArgumentException();
-        }
-
-        BookJpaModel bookJpaModel = BookJpaModel.builder()
-                .id(book.getId().toString())
-                .title(book.getTitle().toString())
-                .isbn13(book.getIsbn13().map(Isbn13::toString).orElseThrow())
-                .status(book.getStatus().name())
-                .build();
-
-        bookJpaGateway.save(bookJpaModel);
-    }
-
-    @Override
-    public void update(Book book) {
-        BookJpaModel bookJpaModel = bookJpaGateway.findById(book.getId().toString())
-                .orElseThrow(() -> new IllegalStateException("BookId not found"));
-        bookJpaModel.setId(book.getId().toString());
-        bookJpaModel.setIsbn13(book.getIsbn13().toString());
-        bookJpaModel.setStatus(book.getStatus().name());
-        UserJpaModel borrower = userJpaGateway.findById(book.getBorrowerId().toString())
-                .orElseThrow(() -> new IllegalStateException("User not found"));
-        bookJpaModel.setBorrower(borrower);
-
+    public void save(Book book) {
+        BookJpaModel bookJpaModel = convertBookToBookJpaModel(book);
         bookJpaGateway.save(bookJpaModel);
     }
 }

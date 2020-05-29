@@ -25,7 +25,7 @@ public class CreateBookUsecaseInteractor implements Usecase<CreateBookInputData,
                 Isbn13.of(createBookInputData.getIsbn13().orElse(null)),
                 Title.of(createBookInputData.getTitle())
         );
-        bookRepository.create(book);
+        bookRepository.save(book);
         return book;
     }
 }

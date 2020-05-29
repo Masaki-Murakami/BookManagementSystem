@@ -33,7 +33,7 @@ public class BorrowBookUsecaseInteractor implements Usecase<BorrowBookInputData,
             throw new IllegalStateException("borrowed books must be up to 5");
         }
         book.lend(borrower.getId());
-        bookRepository.update(book);
+        bookRepository.save(book);
         return null;
     }
 }

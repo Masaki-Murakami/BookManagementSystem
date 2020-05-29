@@ -32,12 +32,4 @@ public class JpaBorrowerRepository implements BorrowerRepository {
         return userJpaGateway.findById(userId.toString())
                 .map(JpaBorrowerRepository::convertUserJpaModelToBorrower);
     }
-
-    @Override
-    public void update(Borrower borrower) {
-        UserJpaModel userJpaModel = userJpaGateway.findById(borrower.getId().toString())
-                .orElseThrow(IllegalStateException::new);
-//TODO なにを保存するか
-        //        userJpaGateway.save()
-    }
 }

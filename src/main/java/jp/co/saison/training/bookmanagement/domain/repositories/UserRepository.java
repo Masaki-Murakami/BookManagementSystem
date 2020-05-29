@@ -9,7 +9,5 @@ public interface UserRepository {
 
     boolean existByName(Name name);
 
-    void create(User user);
-
-    void update(User user);
+    void save(User user);
 }
