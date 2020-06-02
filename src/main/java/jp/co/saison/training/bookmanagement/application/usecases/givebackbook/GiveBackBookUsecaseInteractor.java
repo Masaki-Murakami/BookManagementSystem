@@ -19,7 +19,7 @@ public class GiveBackBookUsecaseInteractor implements Usecase<GiveBackBookInputD
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Void hundle(GiveBackBookInputData giveBackBookInputData) {
+    public Void handle(GiveBackBookInputData giveBackBookInputData) {
         Book book = bookRepository.findById(BookId.fromString(giveBackBookInputData.getBookId()))
                 .orElseThrow(() -> new IllegalArgumentException("book not found"));
 

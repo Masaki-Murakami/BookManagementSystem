@@ -58,7 +58,7 @@ class BorrowBookUsecaseInteractorTest {
         doReturn(Optional.of(borrower)).when(borrowerRepository).findById(borrower.getId());
         doNothing().when(bookRepository).save(any());
 
-        sut.hundle(borrowBookInputData);
+        sut.handle(borrowBookInputData);
 
         verify(bookRepository, times(1)).save(argThat(updatedBook -> {
             return updatedBook.getBorrowerId().orElseThrow().equals(UserId.fromString("00000000-0000-0000-0000-000000000001"))
@@ -77,7 +77,7 @@ class BorrowBookUsecaseInteractorTest {
 
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.hundle(borrowBookInputData)
+                () -> sut.handle(borrowBookInputData)
         );
 
         assertAll(
@@ -103,7 +103,7 @@ class BorrowBookUsecaseInteractorTest {
 
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.hundle(borrowBookInputData)
+                () -> sut.handle(borrowBookInputData)
         );
 
         assertAll(
@@ -137,7 +137,7 @@ class BorrowBookUsecaseInteractorTest {
 
         var exception = assertThrows(
                 IllegalStateException.class,
-                () -> sut.hundle(borrowBookInputData)
+                () -> sut.handle(borrowBookInputData)
         );
 
         assertAll(

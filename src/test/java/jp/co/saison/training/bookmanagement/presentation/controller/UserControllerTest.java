@@ -65,7 +65,7 @@ class UserControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(user).when(createUserUsecaseInteractor).hundle(createUserInputData);
+        doReturn(user).when(createUserUsecaseInteractor).handle(createUserInputData);
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
         mockMvc.perform(
@@ -75,7 +75,7 @@ class UserControllerTest {
                         .content(inputJson))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectJson, true));
-        verify(createUserUsecaseInteractor, times(1)).hundle(createUserInputData);
+        verify(createUserUsecaseInteractor, times(1)).handle(createUserInputData);
     }
 
     @Test
@@ -94,7 +94,7 @@ class UserControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isForbidden());
-        verify(createUserUsecaseInteractor, never()).hundle(any(CreateUserInputData.class));
+        verify(createUserUsecaseInteractor, never()).handle(any(CreateUserInputData.class));
     }
 
     @ParameterizedTest(name = "{0}")
@@ -111,7 +111,7 @@ class UserControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(user).when(createUserUsecaseInteractor).hundle(any(CreateUserInputData.class));
+        doReturn(user).when(createUserUsecaseInteractor).handle(any(CreateUserInputData.class));
 
         MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
         mockMvc.perform(
@@ -120,7 +120,7 @@ class UserControllerTest {
                         .contentType(MEDIA_TYPE_JSON_UTF8)
                         .content(inputJson))
                 .andExpect(status().isOk());
-        verify(createUserUsecaseInteractor, times(1)).hundle(any(CreateUserInputData.class));
+        verify(createUserUsecaseInteractor, times(1)).handle(any(CreateUserInputData.class));
     }
 
     @Tag("異常系")

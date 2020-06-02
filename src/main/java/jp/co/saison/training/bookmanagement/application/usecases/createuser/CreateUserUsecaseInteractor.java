@@ -23,9 +23,9 @@ public class CreateUserUsecaseInteractor implements Usecase<CreateUserInputData,
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public User hundle(CreateUserInputData inputData) {
+    public User handle(CreateUserInputData inputData) {
         Name name = Name.of(inputData.getName());
-        if(userRepository.existByName(name)){
+        if (userRepository.existByName(name)) {
             throw new IllegalArgumentException("name already exists");
         }
 
