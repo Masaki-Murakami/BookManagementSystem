@@ -66,6 +66,5 @@ class CreateUserUsecaseInteractorTest {
                 () -> assertEquals("name already exists", exception.getMessage()),
                 () -> verify(userRepository, never()).save(any())
         );
-
     }
 }

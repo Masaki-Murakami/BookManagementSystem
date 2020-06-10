@@ -115,21 +115,78 @@ InLending --> Lendable : 返却処理(giveBack)
 
 
 ## テスト観点
-### プレゼンテーションレイヤ
-* 認証機能のテスト
-* バリデーション機能のテスト
+### ドメインレイヤ
+* 業務ロジックの機能確認
+
 
 ### アプリケーションレイヤ
 * ユースケースの機能確認
 
-### ドメインレイヤ
-* 業務ロジックの機能確認
+### プレゼンテーションレイヤ
+* 認証機能のテスト
+* バリデーション機能のテスト
 
 ### インフラストラクチャレイヤ
 * DBアクセスの確認
 * 今回はJPAの確認になるため不要とする（諸説あります）
 
 ## テストケース
+
+### ドメインレイヤ
+#### 書籍のテストケース(実装済み)
+テスト対象は`jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book`  
+
+| 状態 | テストケース | 事後確認項目 |
+|--|--|--|
+| 生成前 | 書籍を生成できること | ・書籍IDが生成で指定した書籍IDであること <br> ・Isbn13が生成で指定したIsbn13であること <br> ・titleが生成で指定したtitleであること <br> ・statusがLendableであること <br> ・BorrowerIdが空であること |
+| 貸出可能状態 | 貸出処理が可能であること | ・statusがInLendingであること <br> ・BorrowerIdが操作したユーザーのIDであること |
+| 貸出可能状態 | 返却処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be InLending"であること |
+| 貸出中状態 | 返却処理が可能であること | ・statusがLendableであること <br> ・BorrowerIdが空であること |
+| 貸出中状態 | 貸出処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be Lendable"であること |
+| 貸出中状態 | 貸出利用者以外が返却処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrowerId does not match"であること |
+
+### アプリケーションレイヤ
+#### 利用者を登録のテストケース(実装済み)
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.createuser.CreateUserUsecaseInteractor`
+
+| テストケース | 事後確認項目 |
+|--|--|
+| 利用者を登録できる | ・UserRepository.createが想定のUserを引数に呼び出されていること |
+| 同一のユーザー名が存在する場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"name already exists"であること <br> ・UserRepository.createが呼び出されていないこと |
+
+#### 書籍情報取得のテストケース(実装済み)
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.findbook.FindBookUsecaseInteractor`
+
+| テストケース | 事後確認項目 |
+|--|--|
+| 書籍情報を正常に取得できる | ・戻り値が想定した戻り値であること <br> ・BookRepository.findByIdが想定した引数で呼ばれていること |
+| 書籍が存在しない場合、Optinal.emptyが返却される | ・戻り値がOptinal.emptyであること <br> ・BookRepository.findByIdが想定した引数で呼ばれていること |
+
+#### 書籍登録のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.createbook.CreateBookUsecaseInteractor`  
+
+| テストケース | 事後確認項目 |
+|--|--|
+| 書籍を登録できる | ・BookRepository.createが想定した引数で呼ばれていること |
+
+#### 書籍貸出のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.borrowbook.BorrowBookUsecaseInteractor`  
+
+| テストケース | 事後確認項目 |
+|--|--|
+| 書籍を貸出できる | ・BookRepository.updateが想定したBorrowerId、StatusがInLendingに設定された引数で呼ばれていること |
+| 書籍が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"book not found"であること <br> ・BookRepository.updateが呼び出されていないこと |
+| 利用者が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrower not found"であること <br> ・BookRepository.updateが呼び出されていないこと |
+| 利用者が書籍を5冊以上借りていた場合、例外が発生する | ・IllegalStateExceptionが発生すること <br> ・例外のメッセージが"borrowed books must be up to 5"であること <br> ・BookRepository.updateが呼び出されていないこと |
+
+#### 書籍返却のテストケース
+テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.borrowbook.GiveBackBookUsecaseInteractor`  
+
+| テストケース | 事後確認項目 |
+|--|--|
+| 書籍を返却できる | ・BookRepository.updateがBorrowerIdがnull、StatusがLendableに設定された引数で呼ばれていること |
+| 書籍が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"book not found"であること <br> BookRepository.updateが呼び出されていないこと |
+| 利用者が書籍のBollowerIdと一致しない場合例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrowerId does not match"であること <br> ・BookRepository.updateが呼び出されていないこと |
 
 ### プレゼンテーションレイヤ
 
@@ -191,62 +248,6 @@ InLending --> Lendable : 返却処理(giveBack)
 | 一般利用者は書籍返却を実施できる | ・ステータスコードが200であること <br> ・BorrowBookUsecaseInteractorに想定のBorrowBookInputDataが渡されていること <br> ・想定するJSONがレスポンスに格納されていること |
 | bookIdが35桁以下の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・BorrowBookUsecaseInteractorが呼び出されていないこと |
 | bookIdが37桁以上の場合、ステータスコード400が返却される | ・レスポンスのステータスコードが400であること <br> ・BorrowBookUsecaseInteractorが呼び出されていないこと |
-
-### アプリケーションレイヤ
-#### 利用者を登録のテストケース(実装済み)
-テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.createuser.CreateUserUsecaseInteractor`
-
-| テストケース | 事後確認項目 |
-|--|--|
-| 利用者を登録できる | ・UserRepository.createが想定のUserを引数に呼び出されていること |
-| 同一のユーザー名が存在する場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"name already exists"であること <br> ・UserRepository.createが呼び出されていないこと |
-
-#### 書籍情報取得のテストケース(実装済み)
-テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.findbook.FindBookUsecaseInteractor`
-
-| テストケース | 事後確認項目 |
-|--|--|
-| 書籍情報を正常に取得できる | ・戻り値が想定した戻り値であること <br> ・BookRepository.findByIdが想定した引数で呼ばれていること |
-| 書籍が存在しない場合、Optinal.emptyが返却される | ・戻り値がOptinal.emptyであること <br> ・BookRepository.findByIdが想定した引数で呼ばれていること |
-
-#### 書籍登録のテストケース
-テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.createbook.CreateBookUsecaseInteractor`  
-
-| テストケース | 事後確認項目 |
-|--|--|
-| 書籍を登録できる | ・BookRepository.createが想定した引数で呼ばれていること |
-
-#### 書籍貸出のテストケース
-テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.borrowbook.BorrowBookUsecaseInteractor`  
-
-| テストケース | 事後確認項目 |
-|--|--|
-| 書籍を貸出できる | ・BookRepository.updateが想定したBorrowerId、StatusがInLendingに設定された引数で呼ばれていること |
-| 書籍が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"book not found"であること <br> ・BookRepository.updateが呼び出されていないこと |
-| 利用者が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrower not found"であること <br> ・BookRepository.updateが呼び出されていないこと |
-| 利用者が書籍を5冊以上借りていた場合、例外が発生する | ・IllegalStateExceptionが発生すること <br> ・例外のメッセージが"borrowed books must be up to 5"であること <br> ・BookRepository.updateが呼び出されていないこと |
-
-#### 書籍返却のテストケース
-テスト対象は`jp.co.saison.training.bookmanagement.application.usecases.borrowbook.GiveBackBookUsecaseInteractor`  
-
-| テストケース | 事後確認項目 |
-|--|--|
-| 書籍を返却できる | ・BookRepository.updateがBorrowerIdがnull、StatusがLendableに設定された引数で呼ばれていること |
-| 書籍が存在しない場合、例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"book not found"であること <br> BookRepository.updateが呼び出されていないこと |
-| 利用者が書籍のBollowerIdと一致しない場合例外が発生する | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrowerId does not match"であること <br> ・BookRepository.updateが呼び出されていないこと |
-
-### ドメインレイヤ
-#### 書籍のテストケース(実装済み)
-テスト対象は`jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book`  
-
-| 状態 | テストケース | 事後確認項目 |
-|--|--|--|
-| 生成前 | 書籍を生成できること | ・書籍IDが生成で指定した書籍IDであること <br> ・Isbn13が生成で指定したIsbn13であること <br> ・titleが生成で指定したtitleであること <br> ・statusがLendableであること <br> ・BorrowerIdが空であること |
-| 貸出可能状態 | 貸出処理が可能であること | ・statusがInLendingであること <br> ・BorrowerIdが操作したユーザーのIDであること |
-| 貸出可能状態 | 返却処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be InLending"であること |
-| 貸出中状態 | 返却処理が可能であること | ・statusがLendableであること <br> ・BorrowerIdが空であること |
-| 貸出中状態 | 貸出処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be Lendable"であること |
-| 貸出中状態 | 貸出利用者以外が返却処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrowerId does not match"であること |
 
 ### インフラストラクチャレイヤ
 ORMの機能確認になるため、今回は省略する。  
