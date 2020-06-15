@@ -79,9 +79,9 @@
 |--|--|--|
 | 生成前 | 書籍を生成できること | ・書籍IDが生成で指定した書籍IDであること <br> ・Isbn13が生成で指定したIsbn13であること <br> ・titleが生成で指定したtitleであること <br> ・statusがLendableであること <br> ・BorrowerIdが空であること |
 | 貸出可能状態 | 貸出処理が可能であること | ・statusがInLendingであること <br> ・BorrowerIdが操作したユーザーのIDであること |
-| 貸出可能状態 | 返却処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be InLending"であること |
+| 貸出可能状態 | 返却処理を実行した場合、例外が発生すること | ・IllegalStateExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be InLending"であること |
 | 貸出中状態 | 返却処理が可能であること | ・statusがLendableであること <br> ・BorrowerIdが空であること |
-| 貸出中状態 | 貸出処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be Lendable"であること |
+| 貸出中状態 | 貸出処理を実行した場合、例外が発生すること | ・IllegalStateExceptionが発生すること <br> ・例外のメッセージが"bookStatus must be Lendable"であること |
 | 貸出中状態 | 貸出利用者以外が返却処理を実行した場合、例外が発生すること | ・IllegalArgumentExceptionが発生すること <br> ・例外のメッセージが"borrowerId does not match"であること |
   
 ###  アプリケーションレイヤ
