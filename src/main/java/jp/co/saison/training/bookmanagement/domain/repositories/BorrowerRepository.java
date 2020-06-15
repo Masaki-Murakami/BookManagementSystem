@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface BorrowerRepository {
     Optional<Borrower> findById(UserId userId);
-
-    void update(Borrower borrower);
 }

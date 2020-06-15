@@ -9,6 +9,7 @@ import jp.co.saison.training.bookmanagement.domain.model.bookaggregate.Book;
 import jp.co.saison.training.bookmanagement.presentation.authentication.SimpleLoginUser;
 import jp.co.saison.training.bookmanagement.presentation.dto.BookDto;
 import jp.co.saison.training.bookmanagement.presentation.form.CreateBookForm;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,17 +39,19 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}")
+    @Secured("ROLE_GeneralUser")
     public BookDto findBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @PathVariable("bookId") @Valid @Size(min = 36, max = 36) String bookId) {
         FindBookInputData findBookInputData = FindBookInputData.builder()
                 .bookId(bookId)
                 .build();
-        Book book = findBookUsecase.hundle(findBookInputData).orElseThrow();
+        Book book = findBookUsecase.handle(findBookInputData).orElseThrow();
         return BookDto.fromModel(book);
     }
 
     @PostMapping("")
+    @Secured("ROLE_Administrator")
     public BookDto createBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @RequestBody @Valid CreateBookForm createBookForm) {
@@ -56,11 +59,12 @@ public class BookController {
                 .isbn13(createBookForm.getIsbn13())
                 .title(createBookForm.getTitle())
                 .build();
-        Book book = createBookUsecase.hundle(createBookInputData);
+        Book book = createBookUsecase.handle(createBookInputData);
         return BookDto.fromModel(book);
     }
 
     @PutMapping("/{bookId}/borrow")
+    @Secured("ROLE_GeneralUser")
     public void borrowBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @PathVariable("bookId") @Valid @Size(min = 36, max = 36) String bookId) {
@@ -68,10 +72,11 @@ public class BookController {
                 .borrowerId(simpleLoginUser.getUserId())
                 .bookId(bookId)
                 .build();
-        borrowBookUsecase.hundle(borrowBookInputData);
+        borrowBookUsecase.handle(borrowBookInputData);
     }
 
     @PutMapping("/{bookId}/giveback")
+    @Secured("ROLE_GeneralUser")
     public void giveBackBook(
             @AuthenticationPrincipal SimpleLoginUser simpleLoginUser,
             @PathVariable("bookId") @Valid @Size(min = 36, max = 36) String bookId) {
@@ -79,6 +84,6 @@ public class BookController {
                 .borrowerId(simpleLoginUser.getUserId())
                 .bookId(bookId)
                 .build();
-        giveBackBookUsecase.hundle(giveBackBookInputData);
+        giveBackBookUsecase.handle(giveBackBookInputData);
     }
 }

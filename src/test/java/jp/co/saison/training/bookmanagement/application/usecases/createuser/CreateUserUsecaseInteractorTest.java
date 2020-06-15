@@ -43,9 +43,9 @@ class CreateUserUsecaseInteractorTest {
         doReturn(userId).when(userRepository).generateId();
         doReturn(expectedUser.getPassword().toString()).when(passwordEncoder).encode(createUserInputData.getPassword());
 
-        sut.hundle(createUserInputData);
+        sut.handle(createUserInputData);
 
-        verify(userRepository, times(1)).create(expectedUser);
+        verify(userRepository, times(1)).save(expectedUser);
     }
 
     @Test
@@ -60,12 +60,11 @@ class CreateUserUsecaseInteractorTest {
 
         var exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sut.hundle(createUserInputData)
+                () -> sut.handle(createUserInputData)
         );
         assertAll(
                 () -> assertEquals("name already exists", exception.getMessage()),
-                () -> verify(userRepository, never()).create(any())
+                () -> verify(userRepository, never()).save(any())
         );
-
     }
 }

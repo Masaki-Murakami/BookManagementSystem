@@ -1,4 +1,4 @@
-package jp.co.saison.training.bookmanagement.presentation;
+package jp.co.saison.training.bookmanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackages = "jp.co.saison.training.bookmanagement.infrastructure.repositories.gateway.jpagateway.jpamodel")
 @EnableJpaRepositories("jp.co.saison.training.bookmanagement.infrastructure.repositories.gateway.jpagateway")
 @EnableTransactionManagement
-@ComponentScan("jp.co.saison.training.bookmanagement")
+//@ComponentScan("jp.co.saison.training.bookmanagement")
 public class BookManagementSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(BookManagementSystemApplication.class, args);

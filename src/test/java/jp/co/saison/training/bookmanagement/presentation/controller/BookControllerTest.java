@@ -81,14 +81,14 @@ class BookControllerTest {
 
         doReturn(loginUser).when(loginUserDetailsService).loadUserByUsername(loginUser.getUsername());
         doReturn(Optional.of(loginUser)).when(loginUserDetailsService).loadUserAndAuthenticationByToken(authorization);
-        doReturn(Optional.of(book)).when(findBookUsecaseInteractor).hundle(findBookInputData);
+        doReturn(Optional.of(book)).when(findBookUsecaseInteractor).handle(findBookInputData);
 
         mockMvc.perform(
                 get("/api/books/{0}", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectJson, true));
-        verify(findBookUsecaseInteractor, times(1)).hundle(findBookInputData);
+        verify(findBookUsecaseInteractor, times(1)).handle(findBookInputData);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -104,6 +104,6 @@ class BookControllerTest {
                 get("/api/books/{0}", bookId)
                         .header("Authorization", "Bearer " + authorization))
                 .andExpect(status().isBadRequest());
-        verify(findBookUsecaseInteractor, never()).hundle(any(FindBookInputData.class));
+        verify(findBookUsecaseInteractor, never()).handle(any(FindBookInputData.class));
     }
 }

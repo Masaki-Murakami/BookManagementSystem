@@ -19,13 +19,13 @@ public class CreateBookUsecaseInteractor implements Usecase<CreateBookInputData,
 
     @Override
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public Book hundle(CreateBookInputData createBookInputData) {
+    public Book handle(CreateBookInputData createBookInputData) {
         Book book = Book.create(
                 bookRepository.generateId(),
                 Isbn13.of(createBookInputData.getIsbn13().orElse(null)),
                 Title.of(createBookInputData.getTitle())
         );
-        bookRepository.create(book);
+        bookRepository.save(book);
         return book;
     }
 }

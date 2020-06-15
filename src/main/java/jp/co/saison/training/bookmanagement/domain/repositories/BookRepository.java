@@ -10,7 +10,5 @@ public interface BookRepository {
 
     Optional<Book> findById(BookId bookId);
 
-    void create(Book book);
-
-    void update(Book book);
+    void save(Book book);
 }

@@ -29,28 +29,13 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public void create(User user) {
-        if (userJpaGateway.existsById(user.getId().toString())) {
-            throw new IllegalArgumentException();
-        }
+    public void save(User user) {
         UserJpaModel userJpaModel = UserJpaModel.builder()
                 .id(user.getId().toString())
                 .name(user.getName().toString())
                 .password(user.getPassword().toString())
                 .role(user.getRole().toString())
                 .build();
-        userJpaGateway.save(userJpaModel);
-    }
-
-    @Override
-    public void update(User user) {
-        UserJpaModel userJpaModel = userJpaGateway.findById(user.getId().toString())
-                .orElseThrow(() -> new IllegalArgumentException());
-
-        userJpaModel.setName(user.getName().toString());
-        userJpaModel.setPassword(user.getPassword().toString());
-        userJpaModel.setRole(user.getRole().toString());
-
         userJpaGateway.save(userJpaModel);
     }
 }
